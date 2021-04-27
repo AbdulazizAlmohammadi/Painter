@@ -1,0 +1,15 @@
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.exe
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.deps.json
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.runtimeconfig.json
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.runtimeconfig.dev.json
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.dll
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.pdb
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.csprojAssemblyReference.cache
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.Form1.resources
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.csproj.GenerateResource.cache
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.AssemblyInfoInputs.cache
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.AssemblyInfo.cs
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.csproj.CoreCompileInputs.cache
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.dll
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.pdb
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.genruntimeconfig.cache
