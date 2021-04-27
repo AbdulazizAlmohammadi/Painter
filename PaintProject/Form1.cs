@@ -158,5 +158,11 @@ namespace PaintProject
         {
             
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            paints = new List<Shape> { };
+            this.Invalidate();
+        }
     }
 }
