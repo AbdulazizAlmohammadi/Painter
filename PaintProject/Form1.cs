@@ -23,6 +23,7 @@ namespace PaintProject
         string type;
         public Form1()
         {
+            
             InitializeComponent();
         }
 
@@ -31,10 +32,16 @@ namespace PaintProject
         private void button1_Click(object sender, EventArgs e)
         {
             this.paintSh = new Line();
+            button3.BackColor = Color.WhiteSmoke;
+            button2.BackColor = Color.WhiteSmoke;
+            button1.BackColor = Color.LightGray;
         }
         private void button2_Click(object sender, EventArgs e)
         {
             this.paintSh = new Rectangle();
+            button3.BackColor = Color.WhiteSmoke;
+            button2.BackColor = Color.LightGray;
+            button1.BackColor = Color.WhiteSmoke;
 
         }
 
@@ -42,6 +49,9 @@ namespace PaintProject
         {
 
             this.paintSh = new Circle();
+            button3.BackColor = Color.LightGray;
+            button2.BackColor = Color.WhiteSmoke;
+            button1.BackColor = Color.WhiteSmoke;
 
         }
 
@@ -163,6 +173,11 @@ namespace PaintProject
         {
             paints = new List<Shape> { };
             this.Invalidate();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            button1.BackColor = Color.LightGray;
         }
     }
 }
