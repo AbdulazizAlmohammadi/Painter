@@ -179,5 +179,23 @@ namespace PaintProject
         {
             button1.BackColor = Color.LightGray;
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Extension read = new Extension();
+             paints = read.DisplayFileFromList();
+            this.Invalidate();
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Extension save = new Extension();
+            if (paints.Count > 0)
+            {
+                save.WriteNewFileFromList(paints);
+                MessageBox.Show("تم الحفظ بنجاح");
+            }
+        }
     }
 }
