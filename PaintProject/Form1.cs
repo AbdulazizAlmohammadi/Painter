@@ -20,6 +20,11 @@ namespace PaintProject
         public int penSize = 0;
         public string dashStyle = "Solid";
         List<Shape> paints = new List<Shape> { };
+        Shape selectedShape = null;
+        int dx = 0;
+        int dy = 0;
+        bool isSelected = false;
+        bool isMouseDown = false;
         string type;
         public Form1()
         {
@@ -57,61 +62,78 @@ namespace PaintProject
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
-            
-            paintSh.start = new Point(e.X, e.Y);
+
+           
+            if (selectedShape == null && !isSelected)
+            {
+                paintSh.start = new Point(e.X, e.Y);
+            }
+            else if(isIntract(e))
+            {
+                isMouseDown = true;
+                dx = e.Location.X - selectedShape.getX();
+                dy = e.Location.Y - selectedShape.getY();
+            }
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
-            paintSh.end = new Point(e.X, e.Y);
-            Pen p = new Pen(this.c, penSize);
-            if(dashStyle == "Solid")
+            isMouseDown = false;
+            if (selectedShape == null && !isSelected)
             {
-                p.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+                paintSh.end = new Point(e.X, e.Y);
+                Pen p = new Pen(this.c, penSize);
+                if (dashStyle == "Solid")
+                {
+                    p.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
 
-            }else if (dashStyle == "Dot")
-            {
-                p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                }
+                else if (dashStyle == "Dot")
+                {
+                    p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
-            } else if (dashStyle == "Dash")
-            {
-                p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                }
+                else if (dashStyle == "Dash")
+                {
+                    p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+
+                }
+                else if (dashStyle == "Dash dot")
+                {
+                    p.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
+
+                }
+                else if (dashStyle == "Dash dot dot")
+                {
+                    p.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
+
+                }
+                paintSh.Pen = p;
+                paintSh.IsSelected = false;
+                paints.Add(paintSh);
+                this.Invalidate();
+
+                if (paintSh is Rectangle)
+                {
+
+
+                    paintSh = new Rectangle();
+                }
+                else if (paintSh is Circle)
+                {
+
+
+                    paintSh = new Circle();
+
+
+                }
+                else if (paintSh is Line)
+                {
+                    paintSh = new Line();
+
+                }
 
             }
-            else if(dashStyle == "Dash dot")
-            {
-                p.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
-
-            } else if (dashStyle == "Dash dot dot")
-            {
-                p.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
-
-            }
-            paintSh.Pen = p;
-            paints.Add(paintSh);
-            this.Invalidate();
-
-            if (paintSh is Rectangle)
-            {
-
-
-                paintSh = new Rectangle();
-            }
-            else if (paintSh is Circle)
-            {
-
-
-                paintSh = new Circle();
-
-
-            }
-            else if (paintSh is Line)
-            {
-                paintSh = new Line();
-
-            }
-
-
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -125,13 +147,25 @@ namespace PaintProject
                 {
 
 
-                    g.DrawRectangle(paint.Pen, paint.getX(), paint.getY(), paint.getWidth(), paint.getHight());
+                    g.DrawRectangle(paint.Pen, paint.getX(), paint.getY(), paint.Width, paint.Hight);
+                    if (paint.IsSelected)
+                    {
+                        Pen p = new Pen(Brushes.Blue, 2);
+                        p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                        g.DrawRectangle(p, paint.getX(), paint.getY(), paint.Width, paint.Hight);
+                       /* g.FillEllipse(new SolidBrush(Color.Black), (x + width / 2 - 5), (y + higth / 2 - 5), 10, 10); // middle
+                        g.FillEllipse(new SolidBrush(Color.Blue), (x + width / 2 - 5), (y - 5), 10, 10); // top 
+                        g.FillEllipse(new SolidBrush(Color.Blue), (x - 5), (y + higth / 2 - 5), 10, 10);//left
+                        g.FillEllipse(new SolidBrush(Color.Blue), (x + width - 5), (y + higth / 2 - 5), 10, 10); // right
+                        g.FillEllipse(new SolidBrush(Color.Blue), (x + width / 2 - 5), (y - 5 + higth), 10, 10); // bottom*/
+                    }
                 }
                 else if (paint is Circle)
                 {
 
 
-                    g.DrawEllipse(paint.Pen, paint.getX(), paint.getY(), paint.getWidth(), paint.getHight());
+                    g.DrawEllipse(paint.Pen, paint.getX(), paint.getY(), paint.Width, paint.Hight);
+                    //g.DrawEllipse(paint.Pen, paint.getX(), paint.getY(), 4, 4);
 
                 }
                 else if (paint is Line)
@@ -139,6 +173,28 @@ namespace PaintProject
                     g.DrawLine(paint.Pen, paint.start.X, paint.start.Y, paint.end.X, paint.end.Y);
                 }
             }
+        }
+        public void checkIntract(MouseEventArgs mouse)
+        {
+            System.Drawing.Rectangle rect1;
+            System.Drawing.Rectangle rect2 = new System.Drawing.Rectangle(mouse.X, mouse.Y, 10, 10);
+            foreach (var paint in paints)
+            {
+                rect1 = new System.Drawing.Rectangle(paint.getX(), paint.getY(), paint.Width, paint.Hight);
+
+                if (rect1.IntersectsWith(rect2))
+                {
+                    this.selectedShape = paint;
+                    paint.IsSelected = true;
+                    isSelected = true;
+                    this.Invalidate();
+                    return;
+                }
+            }
+            selectedShape = null;
+            isSelected = false;
+            
+
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -195,6 +251,45 @@ namespace PaintProject
             {
                 save.WriteNewFileFromList(paints);
                 MessageBox.Show("تم الحفظ بنجاح");
+            }
+        }
+
+        private void Form1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (!isSelected)
+            {
+                foreach (var paint in paints)
+                {
+                    paint.IsSelected = false;
+                }
+                checkIntract(e);
+            }
+            else if(!isIntract(e))
+            {
+                 foreach (var paint in paints)
+                {
+                    paint.IsSelected = false;
+                }
+                isSelected = false;
+                this.Invalidate();
+            }
+            
+            
+        }
+
+        public bool isIntract(MouseEventArgs mouse)
+        {
+            var rect1 = new System.Drawing.Rectangle(this.selectedShape.getX(), this.selectedShape.getY(), this.selectedShape.Width, this.Height);
+            var rect2 = new System.Drawing.Rectangle(mouse.X, mouse.Y, 10, 10);
+            return rect1.IntersectsWith(rect2);
+
+        }
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isSelected && isMouseDown)
+            {
+                selectedShape.start.Offset(e.Location.X- dx, e.Location.Y -dy);
+                this.Invalidate();
             }
         }
     }
