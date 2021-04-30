@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "4ZEC2+zZYzSv65DWY/0ZyI/ebsOXhZZnm+K3k4nxTFsMss8Sbo3j/cBNJBy1E8awfLJdxzmjGUfs3YDkrCewcQ==",
+  "dgSpecHash": "Z/Vy8/1Zu8vp9K+2Vh/pOgw3nSpW4PDyTMIa5x+P5OWAVDPx8tjK/q4dbiOrfIerERJU/1qtwwLxNggflOKXRA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\3zAl7arbi\\source\\repos\\PaintProject\\PaintProject\\PaintProject.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "D:\\المعسكر\\الاسبوع 3\\Home Works\\Painter\\PaintProject\\PaintProject.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\IBRA\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.14\\microsoft.netcore.app.host.win-x64.3.1.14.nupkg.sha512"
+  ],
   "logs": []
 }
