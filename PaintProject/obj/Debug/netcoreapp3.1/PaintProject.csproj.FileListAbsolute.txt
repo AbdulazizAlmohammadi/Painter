@@ -13,3 +13,18 @@ C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.
 C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.dll
 C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.pdb
 C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.genruntimeconfig.cache
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.exe
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.deps.json
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.runtimeconfig.json
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.runtimeconfig.dev.json
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.dll
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\bin\Debug\netcoreapp3.1\PaintProject.pdb
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.csprojAssemblyReference.cache
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.Form1.resources
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.csproj.GenerateResource.cache
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.AssemblyInfoInputs.cache
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.AssemblyInfo.cs
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.csproj.CoreCompileInputs.cache
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.dll
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.pdb
+D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.genruntimeconfig.cache
