@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -33,24 +34,24 @@ namespace PaintProject
             }
         }
 
-        public static String ReadFile()
+        public static String ReadFile(String path)
         {
             String line = "";
             String source = "";
             try
             {
                 
-                StreamReader sr = new StreamReader("C:\\Sample.txt");
+                StreamReader sr = new StreamReader(path);
                 
                 line = sr.ReadLine();
-                
+                Debug.WriteLine(line);
                 while (line != null)
                 {
                     
-                    Console.WriteLine(line);
-                    
-                    line = sr.ReadLine();
                     source += line;
+                    Console.WriteLine(source);
+                    source += Environment.NewLine;
+                    line = sr.ReadLine();
                 }
 
                 

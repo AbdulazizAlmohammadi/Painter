@@ -22,7 +22,8 @@ namespace PaintProject
             }
             if (!styles.Contains(val.ToLower()))
             {
-                throw new Exception($"Unexpected Token {input.Character} At {input.Position}"); // TODO mbox and break
+                System.Windows.Forms.MessageBox.Show("Unexpected Token");  // TODO mbox and break
+                return null;
             }
             else
             {

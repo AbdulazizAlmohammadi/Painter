@@ -26,7 +26,8 @@ namespace PaintProject
             }
             if ((input.peek() != ',' && !Char.IsWhiteSpace(input.peek())))
             {
-                throw new Exception($"Unexpected Token {input.peek()} At {input.Position}"); // TODO mbox and break
+                System.Windows.Forms.MessageBox.Show("Unexpected Token"); // TODO mbox and break
+                return null;
             }
             return new Token(val, "Number");
         }

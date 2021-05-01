@@ -20,7 +20,7 @@ namespace PaintProject
         public Canvse canvse = new Canvse();
 
         public Color c = Color.Black;
-        public Shape paintSh = new Line();
+        public Shape paintSh = null;
         public int penSize = 0;
         public string dashStyle = "Solid";
 
@@ -28,7 +28,7 @@ namespace PaintProject
         public static List<Source> source = new List<Source> { };
         string type;
         public bool IsEditing = false;
-        public bool IsDraowing = true;
+        public bool IsDraowing = false;
         public bool IsMovieng = false;
         public bool isResizeing = false;
         public string resize = "";
@@ -45,6 +45,7 @@ namespace PaintProject
         {
 
             InitializeComponent();
+            
         }
 
 
@@ -53,7 +54,7 @@ namespace PaintProject
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            LineButton.BackColor = Color.LightGray;
+            //LineButton.BackColor = Color.LightGray;
         }
         private void LineButton_Click(object sender, EventArgs e)
         {
@@ -62,8 +63,8 @@ namespace PaintProject
             IsMovieng = false;
             selectedShape = null;
             IsDraowing = true;
-            button3.BackColor = Color.WhiteSmoke;
-            button2.BackColor = Color.WhiteSmoke;
+            CircleButton.BackColor = Color.WhiteSmoke;
+            RectangleButton.BackColor = Color.WhiteSmoke;
             LineButton.BackColor = Color.LightGray;
         }
         private void button2_Click(object sender, EventArgs e)
@@ -73,8 +74,8 @@ namespace PaintProject
             IsMovieng = false;
             selectedShape = null;
             IsDraowing = true;
-            button3.BackColor = Color.WhiteSmoke;
-            button2.BackColor = Color.LightGray;
+            CircleButton.BackColor = Color.WhiteSmoke;
+            RectangleButton.BackColor = Color.LightGray;
             LineButton.BackColor = Color.WhiteSmoke;
 
         }
@@ -87,8 +88,8 @@ namespace PaintProject
             IsMovieng = false;
             selectedShape = null;
             IsDraowing = true;
-            button3.BackColor = Color.LightGray;
-            button2.BackColor = Color.WhiteSmoke;
+            CircleButton.BackColor = Color.LightGray;
+            RectangleButton.BackColor = Color.WhiteSmoke;
             LineButton.BackColor = Color.WhiteSmoke;
 
         }
@@ -684,18 +685,18 @@ namespace PaintProject
             for (int i = 0; i < tokens.Count; i++)
             {
                 // If there is a comma after a comma Error  
-                if (tokens[i].Type == "Comma" && tokens[i + 1].Type == "Comma")
+                if (i + 1 < tokens.Count && tokens[i].Type == "Comma" && i+1 <tokens.Count &&tokens[i + 1].Type == "Comma")
                 {
                     Console.WriteLine("Two Commas"); // TODO mbox Error 
                     //break;
                 }
                 // If there is shape or number then a comma add to new token list
-                else if ((tokens[i].Type == "Shape" || tokens[i].Type == "Number") && tokens[i + 1].Type == "Comma")
+                else if (i + 1 < tokens.Count&&(tokens[i].Type == "Shape" || tokens[i].Type == "Number") && tokens[i + 1].Type == "Comma")
                 {
                     tokens2.Add(tokens[i]);
                 }
                 // if there is no comma after a shape or a number Error
-                else if (tokens[i].Type == "Shape" || tokens[i].Type == "Number" && (tokens[i + 1].Type != "Comma"))
+                else if (i + 1 < tokens.Count && (tokens[i].Type == "Shape" || tokens[i].Type == "Number") && (tokens[i + 1].Type != "Comma"))
                 {
                     Console.WriteLine($"no Comma {tokens[i].Value} between {tokens[i + 1]}"); // TODO Error
                     //break;
@@ -711,7 +712,8 @@ namespace PaintProject
                     // if There is a comma after dash style Error
                     else if (tokens[i].Type == "DashStyle" && (tokens[i + 1].Type != "Shape"))
                     {
-                        Console.WriteLine("Only a Shape After DashStyle");
+                        System.Windows.Forms.MessageBox.Show("Unexpected Token"); // TODO Break
+                        return;
                         //break;
                     }
                 }
@@ -733,6 +735,7 @@ namespace PaintProject
             paints = new List<Shape> { };
             for (int i = 0; i < tokens.Count();)
             {
+
                 if (tokens[i].Type == "Shape")
                 {
                     if (tokens[i].Value.ToLower() == "line")
@@ -743,7 +746,7 @@ namespace PaintProject
                         paintSh = new Circle();
                     i++;
                     // x1, y1, x2, y2
-                    if (tokens[i].Type == "Number" && tokens[i + 1].Type == "Number" &&
+                    if (i + 3 < tokens.Count && tokens[i].Type == "Number" && tokens[i + 1].Type == "Number" &&
                        tokens[i + 2].Type == "Number" && tokens[i + 3].Type == "Number")
                     {
                         paintSh.startX = int.Parse(tokens[i++].Value);
@@ -752,8 +755,11 @@ namespace PaintProject
                         paintSh.endY = int.Parse(tokens[i++].Value);
                     }
                     else
-                        throw new Exception("Error");
-                    if (tokens[i].Type == "Number" && tokens[i + 1].Type == "Number" &&
+                    {
+                        System.Windows.Forms.MessageBox.Show("Unexpected Token"); // TODO Break
+                        return;
+                    }
+                    if (i + 2 < tokens.Count && tokens[i].Type == "Number" && tokens[i + 1].Type == "Number" &&
                        tokens[i + 2].Type == "Number")
                     {
                         if (int.Parse(tokens[i].Value) >= 0 && int.Parse(tokens[i].Value) <= 255 &&
@@ -766,18 +772,27 @@ namespace PaintProject
                             color = Color.FromArgb(R, g, b);
                         }
                         else
-                            throw new Exception("Error");
+                        {
+                            System.Windows.Forms.MessageBox.Show("Unexpected Token"); // TODO Break
+                            return;
+                        }
                     }
                     else
-                        throw new Exception("Error");
-                    if (tokens[i].Type == "Number" && tokens[i + 1].Type == "DashStyle")
+                    {
+                        System.Windows.Forms.MessageBox.Show("Unexpected Token"); // TODO Break
+                        return;
+                    }
+                    if (i + 1 < tokens.Count && tokens[i].Type == "Number" && tokens[i + 1].Type == "DashStyle")
                     {
                         pen_Size = int.Parse(tokens[i++].Value);
                         this.dashStyle = tokens[i++].Value;
-                        this.dashStyle.ToLower();
+                        this.dashStyle = this.dashStyle.ToLower();
                     }
                     else
-                        throw new Exception("Error");
+                    {
+                        System.Windows.Forms.MessageBox.Show("Unexpected Token");
+                        return;
+                    }
                     paintSh.Path = new GraphicsPath();
                     if (paintSh is Line)
                     {
@@ -799,7 +814,10 @@ namespace PaintProject
                     this.Invalidate();
                 }
                 else
-                    throw new Exception("Unexpected Shape");
+                {
+                    System.Windows.Forms.MessageBox.Show("Unexpected Token"); // TODO Break
+                    return;
+                }
             }
         }
         private void penStyle(Pen Pen)
@@ -833,6 +851,31 @@ namespace PaintProject
         private void button1_Click(object sender, EventArgs e)
         {
             Tokenize();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog save = new SaveFileDialog();
+            save.FileName = "source.drw";
+            save.Filter = "Text File |*.drw";
+            if (save.ShowDialog() == DialogResult.OK)
+            {
+                Extension.fileName = save.FileName;
+                Extension.SaveFile(this.textBox1.Text);
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "Text File |*.drw";
+            if (open.ShowDialog() == DialogResult.OK)
+            {
+                Debug.WriteLine(open.FileName);   
+                this.textBox1.Text = Extension.ReadFile(open.FileName);
+                Tokenize();
+                this.tabPage1.Invalidate();
+            }
         }
     }
 }
