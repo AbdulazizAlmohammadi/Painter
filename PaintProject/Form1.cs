@@ -23,10 +23,11 @@ namespace PaintProject
         public int penSize = 0;
         public string dashStyle = "Solid";
         
-        List<Shape> paints = new List<Shape> { }; 
+        public static List<Shape> paints = new List<Shape> { };
+        public static List<Source> source = new List<Source> { };
         string type;
         public bool IsEditing = false; 
-        public bool IsDraowing = false;
+        public bool IsDraowing = true;
         public bool IsMovieng = false;
         public bool isResizeing = false;
         public string resize = "";
@@ -43,40 +44,14 @@ namespace PaintProject
             InitializeComponent();
         }
         
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        
+
+
+
+        private void Form1_Load(object sender, EventArgs e)
         {
-            Graphics g = e.Graphics;
-
-            foreach (var paint in paints)
-            {
-
-                if (paint is Rectangle)
-                {
-                    g.DrawRectangle(paint.Pen, paint.getX(), paint.getY(), paint.getWidth(), paint.getHight());
-                }
-                else if (paint is Circle)
-                {
-                    g.DrawEllipse(paint.Pen, paint.getX(), paint.getY(), paint.getWidth(), paint.getHight());
-                }
-                else if (paint is Line)
-                {
-                    g.DrawLine(paint.Pen, paint.startX, paint.startY, paint.endX, paint.endY);
-                }
-            }
-
-            if (selectedShape != null)
-            {
-                Pen p = new Pen(Color.Black, 2);
-                p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                g.DrawRectangle(p,selectedShape.getX() - 10, selectedShape.getY() - 10, selectedShape.getWidth() + 20, selectedShape.getHight() + 20);
-                g.FillEllipse(Brushes.Gray, (selectedShape.getX() + selectedShape.getWidth()/2) - 5,selectedShape.getY() - 15, 10, 10); //top
-                g.FillEllipse(Brushes.Gray, selectedShape.getX() - 15, (selectedShape.getY() + selectedShape.getHight()/2) - 5, 10, 10); //left
-                g.FillEllipse(Brushes.Gray, selectedShape.getX() + selectedShape.getWidth() + 5, (selectedShape.getY() + selectedShape.getHight()/2) - 5, 10, 10); //right
-                g.FillEllipse(Brushes.Gray, (selectedShape.getX() + selectedShape.getWidth()/2) - 5,selectedShape.getY() + selectedShape.getHight() + 5, 10, 10); //bottom
-            }
+            LineButton.BackColor = Color.LightGray;
         }
-
-
         private void LineButton_Click(object sender, EventArgs e)
         {
             this.paintSh = new Line();
@@ -114,12 +89,122 @@ namespace PaintProject
             LineButton.BackColor = Color.WhiteSmoke;
 
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog();
+            MyDialog.AllowFullOpen = true;
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+            {
+                
+                this.c = MyDialog.Color;
+                this.button4.BackColor = c;
+                paintSh.Color = c;
+                if (selectedShape != null && IsEditing)
+                {
+                    selectedShape.Pen.Color = c;
+                    this.tabPage1.Invalidate();
+                    ToSource(paints);
+                }
+                
+            }
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            this.penSize = (int)this.numericUpDown1.Value;
+            if (selectedShape != null)
+            {
+                selectedShape.Pen.Width = (int) this.numericUpDown1.Value;
+                ToSource(paints);
+                this.tabPage1.Invalidate();
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.dashStyle = this.comboBox1.SelectedItem.ToString();
+            if (selectedShape != null)
+            {
+                if(dashStyle == "Solid")
+                {
+                    selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+
+                }else if (dashStyle == "Dot")
+                {
+                    selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+
+                } else if (dashStyle == "Dash")
+                {
+                    selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+                }
+                else if(dashStyle == "Dash dot")
+                {
+                    selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
+
+                } else if (dashStyle == "Dash dot dot")
+                {
+                    selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
+                }
+                ToSource(paints);
+                this.tabPage1.Invalidate();
+            }
+        }
         
-        private void Form1_MouseClick(object sender, MouseEventArgs e)
+        private void button5_Click(object sender, EventArgs e)
+        {
+            paints = new List<Shape> { }; // edit
+            ToSource(paints);
+            selectedShape = null;
+            this.tabPage1.Invalidate();
+        }
+
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            IsEditing = true;
+            IsDraowing = false; 
+        }
+
+        private void tabPage1_Paint(object sender, PaintEventArgs e)
+        {
+
+            Graphics g = e.Graphics;
+
+            foreach (var paint in paints)
+            {
+
+                if (paint is Rectangle)
+                {
+                    g.DrawRectangle(paint.Pen, paint.getX(), paint.getY(), paint.getWidth(), paint.getHight());
+                }
+                else if (paint is Circle)
+                {
+                    g.DrawEllipse(paint.Pen, paint.getX(), paint.getY(), paint.getWidth(), paint.getHight());
+                }
+                else if (paint is Line)
+                {
+                    g.DrawLine(paint.Pen, paint.startX, paint.startY, paint.endX, paint.endY);
+                }
+            }
+
+            if (selectedShape != null)
+            {
+                Pen p = new Pen(Color.Black, 2);
+                p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                g.DrawRectangle(p, selectedShape.getX() - 10, selectedShape.getY() - 10, selectedShape.getWidth() + 20, selectedShape.getHight() + 20);
+                g.FillEllipse(Brushes.Gray, (selectedShape.getX() + selectedShape.getWidth() / 2) - 5, selectedShape.getY() - 15, 10, 10); //top
+                g.FillEllipse(Brushes.Gray, selectedShape.getX() - 15, (selectedShape.getY() + selectedShape.getHight() / 2) - 5, 10, 10); //left
+                g.FillEllipse(Brushes.Gray, selectedShape.getX() + selectedShape.getWidth() + 5, (selectedShape.getY() + selectedShape.getHight() / 2) - 5, 10, 10); //right
+                g.FillEllipse(Brushes.Gray, (selectedShape.getX() + selectedShape.getWidth() / 2) - 5, selectedShape.getY() + selectedShape.getHight() + 5, 10, 10); //bottom
+            }
+        }
+
+        private void tabPage1_MouseClick(object sender, MouseEventArgs e)
         {
             if (IsEditing)
             {
-                
+
                 Point Curser = new Point(e.X, e.Y);
                 selectedShape = null;
                 foreach (var shape in paints)
@@ -132,12 +217,14 @@ namespace PaintProject
                         IsMovieng = true;
                     }
                 }
-                this.Invalidate();
+              
+                this.tabPage1.Invalidate();
             }
         }
 
-        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        private void tabPage1_MouseDown(object sender, MouseEventArgs e)
         {
+
             if (IsDraowing)
             {
                 //paintSh.start = new Point(e.X, e.Y);
@@ -150,15 +237,15 @@ namespace PaintProject
                 IsMovieng = true;
                 deltaX = Math.Abs(selectedShape.startX - e.X);
                 deltaY = Math.Abs(selectedShape.startY - e.Y);
-            
+
                 if (selectedShape.Path.GetBounds().Contains(e.X + 15, e.Y + 15) || selectedShape.Path.GetBounds().Contains(e.X - 15, e.Y - 15))
                 {
-                    System.Drawing.Rectangle mouse = new System.Drawing.Rectangle(e.X-10, e.Y-10, 20, 20);
-                    System.Drawing.Rectangle top = new System.Drawing.Rectangle((selectedShape.getX() + selectedShape.getWidth()/2) - 5,selectedShape.getY() - 15, 10, 10);
-                    System.Drawing.Rectangle left = new System.Drawing.Rectangle(selectedShape.getX() - 15, (selectedShape.getY() + selectedShape.getHight()/2) - 5, 10, 10);
-                    System.Drawing.Rectangle right = new System.Drawing.Rectangle(selectedShape.getX() + selectedShape.getWidth() + 5, (selectedShape.getY() + selectedShape.getHight()/2) - 5, 10, 10);
-                    System.Drawing.Rectangle bottom = new System.Drawing.Rectangle((selectedShape.getX() + selectedShape.getWidth()/2) - 5,selectedShape.getY() + selectedShape.getHight() + 5, 10, 10);
-                    
+                    System.Drawing.Rectangle mouse = new System.Drawing.Rectangle(e.X - 10, e.Y - 10, 20, 20);
+                    System.Drawing.Rectangle top = new System.Drawing.Rectangle((selectedShape.getX() + selectedShape.getWidth() / 2) - 5, selectedShape.getY() - 15, 10, 10);
+                    System.Drawing.Rectangle left = new System.Drawing.Rectangle(selectedShape.getX() - 15, (selectedShape.getY() + selectedShape.getHight() / 2) - 5, 10, 10);
+                    System.Drawing.Rectangle right = new System.Drawing.Rectangle(selectedShape.getX() + selectedShape.getWidth() + 5, (selectedShape.getY() + selectedShape.getHight() / 2) - 5, 10, 10);
+                    System.Drawing.Rectangle bottom = new System.Drawing.Rectangle((selectedShape.getX() + selectedShape.getWidth() / 2) - 5, selectedShape.getY() + selectedShape.getHight() + 5, 10, 10);
+
                     if (mouse.IntersectsWith(top))
                     {
                         isResizeing = true;
@@ -187,42 +274,44 @@ namespace PaintProject
             }
         }
 
-        private void Form1_MouseUp(object sender, MouseEventArgs e)
+        private void tabPage1_MouseUp(object sender, MouseEventArgs e)
         {
-            
             if (IsDraowing)
             {
                 //shapePath = new GraphicsPath(); //edit
-                
+
                 //paintSh.end = new Point(e.X, e.Y);
                 paintSh.endX = e.X;
                 paintSh.endY = e.Y;
-                
+
                 Pen p = new Pen(this.c, penSize);
-                if(dashStyle == "Solid")
+                if (dashStyle == "Solid")
                 {
                     p.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
 
-                }else if (dashStyle == "Dot")
+                }
+                else if (dashStyle == "Dot")
                 {
                     p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
-                } else if (dashStyle == "Dash")
+                }
+                else if (dashStyle == "Dash")
                 {
                     p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
 
                 }
-                else if(dashStyle == "Dash dot")
+                else if (dashStyle == "Dash dot")
                 {
                     p.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
 
-                } else if (dashStyle == "Dash dot dot")
+                }
+                else if (dashStyle == "Dash dot dot")
                 {
                     p.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
 
                 }
 
-                
+
 
                 if (paintSh is Rectangle)
                 {
@@ -230,6 +319,7 @@ namespace PaintProject
                     System.Drawing.Rectangle rect = new System.Drawing.Rectangle(paintSh.getX(), paintSh.getY(),
                         paintSh.getWidth(), paintSh.getHight());
                     paintSh.Path.AddRectangle(rect);
+                   
                 }
                 else if (paintSh is Circle)
                 {
@@ -237,6 +327,7 @@ namespace PaintProject
                     System.Drawing.Rectangle cir = new System.Drawing.Rectangle(paintSh.getX(), paintSh.getY(),
                         paintSh.getWidth(), paintSh.getHight());
                     paintSh.Path.AddRectangle(cir);
+                    
                 }
                 else if (paintSh is Line)
                 {
@@ -248,18 +339,19 @@ namespace PaintProject
                     //paintSh.Path.AddLine(paintSh.start, paintSh.end);
                     paintSh.Path.AddLine(start, end);
                 }
-                
+
                 paintSh.Pen = p;
                 paints.Add(paintSh);
 
                 this.Invalidate();
+                this.tabPage1.Invalidate();
 
                 if (paintSh is Rectangle)
                 {
 
 
                     paintSh = new Rectangle();
-                    
+
                 }
                 else if (paintSh is Circle)
                 {
@@ -278,33 +370,34 @@ namespace PaintProject
 
             if (selectedShape != null)
             {
-                
+
             }
-            
+
             IsMovieng = false;
             isResizeing = false;
-        }
+            ToSource(paints);
 
-        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        }
+        private void tabPage1_MouseMove(object sender, MouseEventArgs e)
         {
             if (IsMovieng && selectedShape != null)
             {
                 int AfterMoveX = selectedShape.getX();
                 int AfterMoveY = selectedShape.getY();
-                
-                if (selectedShape.endX >selectedShape.startX )
+
+                if (selectedShape.endX > selectedShape.startX)
                 {
                     selectedShape.startX = e.X - deltaX;
-                    selectedShape.endX = e.X + selectedWidth  - deltaX;
+                    selectedShape.endX = e.X + selectedWidth - deltaX;
                     AfterMoveX = selectedShape.startX;
                 }
                 else
                 {
                     selectedShape.endX = e.X - deltaX;
-                    selectedShape.startX = e.X + selectedWidth  - deltaX;
+                    selectedShape.startX = e.X + selectedWidth - deltaX;
                     AfterMoveX = selectedShape.endX;
                 }
-                if (selectedShape.endY > selectedShape.startY )
+                if (selectedShape.endY > selectedShape.startY)
                 {
                     selectedShape.startY = e.Y - deltaY;
                     selectedShape.endY = e.Y + selectedHeight - deltaY;
@@ -316,11 +409,11 @@ namespace PaintProject
                     selectedShape.startY = e.Y + selectedHeight - deltaY;
                     AfterMoveY = selectedShape.endY;
                 }
-                
-                
-                
-                
-                
+
+
+
+
+
                 //selctedShape.Path.Reset();
                 if (selectedShape is Rectangle || selectedShape is Circle)
                 {
@@ -328,7 +421,7 @@ namespace PaintProject
                     System.Drawing.Rectangle rect = new System.Drawing.Rectangle(AfterMoveX, AfterMoveY,
                         selectedWidth, selectedHeight);
                     selectedShape.Path.AddRectangle(rect);
-                } 
+                }
                 else if (selectedShape is Line)
                 {
                     selectedShape.Path = new GraphicsPath();
@@ -336,7 +429,8 @@ namespace PaintProject
                 }
 
 
-                this.Invalidate();
+               
+                this.tabPage1.Invalidate();
             }
 
 
@@ -367,8 +461,8 @@ namespace PaintProject
                             this.resize = "bottom";
                         }
                     }
-                    
-                    
+
+
                 }
                 else if (resize == "bottom")
                 {
@@ -386,7 +480,7 @@ namespace PaintProject
                     else
                     {
                         selectedShape.startY = e.Y - 10;
-                        selectedHeight = selectedShape.startY - selectedShape.endY ;
+                        selectedHeight = selectedShape.startY - selectedShape.endY;
                         AfterResizeY = selectedShape.endY;
                         if (selectedShape.startY < selectedShape.endY)
                         {
@@ -434,7 +528,7 @@ namespace PaintProject
                     else
                     {
                         selectedShape.startX = e.X - 10;
-                        selectedWidth = selectedShape.startX - selectedShape.endX ;
+                        selectedWidth = selectedShape.startX - selectedShape.endX;
                         AfterResizeX = selectedShape.endX;
                         if (selectedShape.startX < selectedShape.endX)
                         {
@@ -449,91 +543,63 @@ namespace PaintProject
                     System.Drawing.Rectangle rect = new System.Drawing.Rectangle(AfterResizeX, AfterResizeY,
                         selectedWidth, selectedHeight);
                     selectedShape.Path.AddRectangle(rect);
-                } 
+                }
                 else if (selectedShape is Line)
                 {
                     selectedShape.Path = new GraphicsPath();
                     selectedShape.Path.AddLine(selectedShape.startX, selectedShape.startY, selectedShape.endX, selectedShape.endY);
                 }
-                
-                this.Invalidate();
+
+                this.tabPage1.Invalidate();
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        public void ToSource(List<Shape> shapes)
         {
-            ColorDialog MyDialog = new ColorDialog();
-            MyDialog.AllowFullOpen = true;
-            if (MyDialog.ShowDialog() == DialogResult.OK)
+            source= new List<Source> { };
+            Source s;
+            foreach (var shape in shapes)
             {
                 
-                this.c = MyDialog.Color;
-                this.button4.BackColor = c;
-                paintSh.Color = c;
-                if (selectedShape != null && IsEditing)
+                s = new Source();
+                if (shape is Line)
                 {
-                    selectedShape.Pen.Color = c;
-                    this.Invalidate();
+                    s.name = "line";
                 }
-            }
-        }
+                else if (shape is Circle)
+                {
+                    s.name = "circ";
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-            this.penSize = (int)this.numericUpDown1.Value;
-            if (selectedShape != null)
+                }
+                else if (shape is Rectangle)
+                {
+                    s.name = "rect";
+
+                }
+                s.x1 = shape.startX;
+                s.y1 = shape.startY;
+                s.x2 = shape.endX;
+                s.y2 = shape.endY;
+                s.R = shape.Pen.Color.R;
+                s.G = shape.Pen.Color.G;
+                s.B = shape.Pen.Color.B;
+                s.penSize = (int)shape.Pen.Width;
+                s.dashStyle = shape.Pen.DashStyle.ToString();
+                source.Add(s);
+
+            }
+            
+
+            
+            String sourcCode = "";
+
+            foreach (var sc in source)
             {
-                selectedShape.Pen.Width = (int) this.numericUpDown1.Value;
-                this.Invalidate();
+                sourcCode += $"{sc.name} , {sc.x1} , {sc.y1} , {sc.x2} , {sc.y2}  , {sc.R} ,{sc.G} , {sc.B} , {sc.penSize} , {sc.dashStyle} "+Environment.NewLine;
             }
+            this.textBox1.Text = sourcCode;
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            this.dashStyle = this.comboBox1.SelectedItem.ToString();
-            if (selectedShape != null)
-            {
-                if(dashStyle == "Solid")
-                {
-                    selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
 
-                }else if (dashStyle == "Dot")
-                {
-                    selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-
-                } else if (dashStyle == "Dash")
-                {
-                    selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                }
-                else if(dashStyle == "Dash dot")
-                {
-                    selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
-
-                } else if (dashStyle == "Dash dot dot")
-                {
-                    selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
-                }
-                
-                this.Invalidate();
-            }
-        }
-        
-        private void button5_Click(object sender, EventArgs e)
-        {
-            paints = new List<Shape> { }; // edit
-            this.Invalidate();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            LineButton.BackColor = Color.LightGray;
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            IsEditing = true;
-            IsDraowing = false; 
-        }
-        
     }
 }

@@ -8,19 +8,19 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\IBRA\\.nuget\\packages\\": {}
+    "C:\\Users\\3zAl7arbi\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\المعسكر\\الاسبوع 3\\Home Works\\Painter\\PaintProject\\PaintProject.csproj",
+      "projectUniqueName": "C:\\Users\\3zAl7arbi\\source\\repos\\PaintProject\\PaintProject\\PaintProject.csproj",
       "projectName": "PaintProject",
-      "projectPath": "D:\\المعسكر\\الاسبوع 3\\Home Works\\Painter\\PaintProject\\PaintProject.csproj",
-      "packagesPath": "C:\\Users\\IBRA\\.nuget\\packages\\",
-      "outputPath": "D:\\المعسكر\\الاسبوع 3\\Home Works\\Painter\\PaintProject\\obj\\",
+      "projectPath": "C:\\Users\\3zAl7arbi\\source\\repos\\PaintProject\\PaintProject\\PaintProject.csproj",
+      "packagesPath": "C:\\Users\\3zAl7arbi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\3zAl7arbi\\source\\repos\\PaintProject\\PaintProject\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\IBRA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\3zAl7arbi\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -55,12 +55,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[3.1.14, 3.1.14]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
@@ -69,7 +63,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

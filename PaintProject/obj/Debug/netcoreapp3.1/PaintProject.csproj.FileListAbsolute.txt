@@ -28,3 +28,4 @@ D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\net
 D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.dll
 D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.pdb
 D:\المعسكر\الاسبوع 3\Home Works\Painter\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.genruntimeconfig.cache
+C:\Users\3zAl7arbi\source\repos\PaintProject\PaintProject\obj\Debug\netcoreapp3.1\PaintProject.Properties.Resources.resources

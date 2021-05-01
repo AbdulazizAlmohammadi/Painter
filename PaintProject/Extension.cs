@@ -10,7 +10,7 @@ namespace PaintProject
     {
         private string fileName = "paint.p";
 
-        public void WriteNewFileFromList(List<Shape> shapes)
+   /*     public void WriteNewFileFromList(List<Shape> shapes)
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
             {
@@ -41,7 +41,7 @@ namespace PaintProject
 
             }
         }
-
+*/
         public List<Shape> DisplayFileFromList()
         {
             int MagicNumber;
@@ -102,9 +102,9 @@ namespace PaintProject
                             shape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
 
                         }
-                        shape.start = new Point(reader.ReadInt32(), reader.ReadInt32());
+                        /*shape.start = new Point(reader.ReadInt32(), reader.ReadInt32());
                        
-                        shape.end = new Point(reader.ReadInt32(), reader.ReadInt32());
+                        shape.end = new Point(reader.ReadInt32(), reader.ReadInt32());*/
 
                         shapes.Add(shape);
                     }
