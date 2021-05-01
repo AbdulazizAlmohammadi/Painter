@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -658,6 +659,180 @@ namespace PaintProject
             this.textBox1.Text = sourcCode;
         }
 
+        public void Tokenize()
+        {
+            Input input = new Input(this.textBox1.Text);
+            Tokenizable[] handlers = new Tokenizable[] { new WhitespaceHandler(), new ShapeHandler(), new NumberHandler(), new CommaHandler(), new DashStyleHandler() };
 
+            Tokenizer t = new Tokenizer(input, handlers);
+
+            Token token = new Token();
+            List<Token> tokens = new List<Token>();
+
+
+            while (token != null)
+            {
+                token = t.tokenize();
+                if (token != null && (token.Type != "Whitespace"))
+                {
+                    tokens.Add(token);
+                }
+            }
+
+            List<Token> tokens2 = new List<Token>();
+
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                // If there is a comma after a comma Error  
+                if (tokens[i].Type == "Comma" && tokens[i + 1].Type == "Comma")
+                {
+                    Console.WriteLine("Two Commas"); // TODO mbox Error 
+                    //break;
+                }
+                // If there is shape or number then a comma add to new token list
+                else if ((tokens[i].Type == "Shape" || tokens[i].Type == "Number") && tokens[i + 1].Type == "Comma")
+                {
+                    tokens2.Add(tokens[i]);
+                }
+                // if there is no comma after a shape or a number Error
+                else if (tokens[i].Type == "Shape" || tokens[i].Type == "Number" && (tokens[i + 1].Type != "Comma"))
+                {
+                    Console.WriteLine($"no Comma {tokens[i].Value} between {tokens[i + 1]}"); // TODO Error
+                    //break;
+                }
+                // for dash style cases
+                if (i + 1 < tokens.Count)
+                {
+                    // if there is a dashstyle token then a shape token add 
+                    if (tokens[i].Type == "DashStyle" && (tokens[i + 1].Type == "Shape"))
+                    {
+                        tokens2.Add(tokens[i]);
+                    }
+                    // if There is a comma after dash style Error
+                    else if (tokens[i].Type == "DashStyle" && (tokens[i + 1].Type != "Shape"))
+                    {
+                        Console.WriteLine("Only a Shape After DashStyle");
+                        //break;
+                    }
+                }
+                else if (tokens[i].Type == "DashStyle")
+                {
+                    tokens2.Add(tokens[i]);
+                }
+            }
+            Parser(tokens2);
+            foreach (var item in tokens2)
+            {
+                Debug.WriteLine(item.Value);
+            }
+        }
+        private void Parser(List<Token> tokens)
+        {
+            Color color = new Color();
+            int pen_Size = 0;
+            paints = new List<Shape> { };
+            for (int i = 0; i < tokens.Count();)
+            {
+                if (tokens[i].Type == "Shape")
+                {
+                    if (tokens[i].Value.ToLower() == "line")
+                        paintSh = new Line();
+                    else if (tokens[i].Value.ToLower() == "rect")
+                        paintSh = new Rectangle();
+                    else if (tokens[i].Value.ToLower() == "circ")
+                        paintSh = new Circle();
+                    i++;
+                    // x1, y1, x2, y2
+                    if (tokens[i].Type == "Number" && tokens[i + 1].Type == "Number" &&
+                       tokens[i + 2].Type == "Number" && tokens[i + 3].Type == "Number")
+                    {
+                        paintSh.startX = int.Parse(tokens[i++].Value);
+                        paintSh.startY = int.Parse(tokens[i++].Value);
+                        paintSh.endX = int.Parse(tokens[i++].Value);
+                        paintSh.endY = int.Parse(tokens[i++].Value);
+                    }
+                    else
+                        throw new Exception("Error");
+                    if (tokens[i].Type == "Number" && tokens[i + 1].Type == "Number" &&
+                       tokens[i + 2].Type == "Number")
+                    {
+                        if (int.Parse(tokens[i].Value) >= 0 && int.Parse(tokens[i].Value) <= 255 &&
+                            int.Parse(tokens[i + 1].Value) >= 0 && int.Parse(tokens[i + 1].Value) <= 255 &&
+                            int.Parse(tokens[i + 2].Value) >= 0 && int.Parse(tokens[i + 2].Value) <= 255)
+                        {
+                            int R = int.Parse(tokens[i++].Value);
+                            int g = int.Parse(tokens[i++].Value);
+                            int b = int.Parse(tokens[i++].Value);
+                            color = Color.FromArgb(R, g, b);
+                        }
+                        else
+                            throw new Exception("Error");
+                    }
+                    else
+                        throw new Exception("Error");
+                    if (tokens[i].Type == "Number" && tokens[i + 1].Type == "DashStyle")
+                    {
+                        pen_Size = int.Parse(tokens[i++].Value);
+                        this.dashStyle = tokens[i++].Value;
+                        this.dashStyle.ToLower();
+                    }
+                    else
+                        throw new Exception("Error");
+                    paintSh.Path = new GraphicsPath();
+                    if (paintSh is Line)
+                    {
+                        Point start = new Point(paintSh.startX, paintSh.startY);
+                        Point end = new Point(paintSh.endX, paintSh.endY);
+                        //paintSh.Path.AddLine(paintSh.start, paintSh.end);
+                        paintSh.Path.AddLine(start, end);
+                    }
+                    else
+                    {
+                        System.Drawing.Rectangle cir = new System.Drawing.Rectangle(paintSh.getX(), paintSh.getY(),
+                   paintSh.getWidth(), paintSh.getHight());
+                        paintSh.Path.AddRectangle(cir);
+                    }
+                    Pen p = new Pen(color, pen_Size);
+                    penStyle(p);
+                    paintSh.Pen = p;
+                    paints.Add(paintSh);
+                    this.Invalidate();
+                }
+                else
+                    throw new Exception("Unexpected Shape");
+            }
+        }
+        private void penStyle(Pen Pen)
+        {
+            if (dashStyle == "solid")
+            {
+                Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+
+            }
+            else if (dashStyle == "dot")
+            {
+                Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+
+            }
+            else if (dashStyle == "dash")
+            {
+                Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+            }
+            else if (dashStyle == "dashdot")
+            {
+                Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
+
+            }
+            else if (dashStyle == "dashdotdot")
+            {
+                Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
+            }
+        }
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Tokenize();
+        }
     }
 }

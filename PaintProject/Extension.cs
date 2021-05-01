@@ -8,111 +8,64 @@ namespace PaintProject
 {
     class Extension
     {
-        private string fileName = "paint.p";
+        public static string fileName = "source.drw";
 
-   /*     public void WriteNewFileFromList(List<Shape> shapes)
+  
+        public static void SaveFile(String source)
         {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+            try
             {
-                writer.Write(135);
-                writer.Write(shapes.Count);
-                foreach (var shape in shapes)
-                {
-                    if(shape is Rectangle)
-                    {
-                        writer.Write(0);
-                    } else if (shape is Circle)
-                    {
-                        writer.Write(1);
-                    } else if (shape is Line)
-                    {
-                        writer.Write(2);
-                    }
-
-                    writer.Write(shape.Color.ToArgb());
-                    writer.Write(shape.Pen.Color.ToArgb());
-                    writer.Write(shape.Pen.Width);
-                    writer.Write(shape.Pen.DashStyle.ToString());
-                    writer.Write(shape.start.X);
-                    writer.Write(shape.start.Y);
-                    writer.Write(shape.end.X);
-                    writer.Write(shape.end.Y);
-                }
-
+                
+                StreamWriter sw = new StreamWriter(fileName);
+               
+                sw.WriteLine(source);
+                
+                //Close the file
+                sw.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
             }
         }
-*/
-        public List<Shape> DisplayFileFromList()
+
+        public static String ReadFile()
         {
-            int MagicNumber;
-            int length;
-            List<Shape> shapes = new List<Shape> { } ;
-            Shape shape ;
-            int type;
-            string dashStyle = "";
-            if (File.Exists(fileName))
+            String line = "";
+            String source = "";
+            try
             {
-                using (BinaryReader reader = new BinaryReader(File.Open(fileName, FileMode.Open)))
+                
+                StreamReader sr = new StreamReader("C:\\Sample.txt");
+                
+                line = sr.ReadLine();
+                
+                while (line != null)
                 {
-                    MagicNumber = reader.ReadInt32();
-                    length = reader.ReadInt32();
-                    for (int i = 0; i < length; i++)
-                    {
-                        type = reader.ReadInt32();
-                        if(type == 0)
-                        {
-                            shape = new Rectangle();
-                        } else if(type == 1)
-                        {
-                            shape = new Circle();
-                        } else
-                        {
-                            shape = new Line();
-                        }
-
-                        
-                        shape.Color = Color.FromArgb(reader.ReadInt32());
-                        shape.Pen.Color = Color.FromArgb(reader.ReadInt32());
-                        
-                        shape.Pen.Width = reader.ReadInt32();
-                        
-                        dashStyle = reader.ReadString();
-                        if (dashStyle == "Solid")
-                        {
-                            shape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-
-                        }
-                        else if (dashStyle == "Dot")
-                        {
-                            shape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-
-                        }
-                        else if (dashStyle == "Dash")
-                        {
-                            shape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-
-                        }
-                        else if (dashStyle == "Dash dot")
-                        {
-                            shape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
-
-                        }
-                        else if (dashStyle == "Dash dot dot")
-                        {
-                            shape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
-
-                        }
-                        /*shape.start = new Point(reader.ReadInt32(), reader.ReadInt32());
-                       
-                        shape.end = new Point(reader.ReadInt32(), reader.ReadInt32());*/
-
-                        shapes.Add(shape);
-                    }
+                    
+                    Console.WriteLine(line);
+                    
+                    line = sr.ReadLine();
+                    source += line;
                 }
 
-
+                
+                sr.Close();
+                Console.ReadLine();
             }
-            return shapes;
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
+            }
+            return source;
         }
     }
 }

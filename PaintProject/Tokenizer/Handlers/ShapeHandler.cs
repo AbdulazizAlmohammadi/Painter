@@ -25,7 +25,8 @@ namespace PaintProject
 
                 if (input.peek() != ',' && !Char.IsWhiteSpace(input.peek()))
                 {
-                    throw new Exception("Not Valid Shape"); // TODO mbox and break;
+                    System.Windows.Forms.MessageBox.Show("Unexpected Token"); // TODO mbox and break;
+                    return null;
                 }
 
                 if (val.ToLower() == "rect" || val.ToLower() == "circ" || val.ToLower() == "line")
@@ -33,7 +34,8 @@ namespace PaintProject
                     return new Token(val, "Shape");
                 }
             }
-            throw new Exception("Not Valid Shape"); // TODO Break
+            System.Windows.Forms.MessageBox.Show("Unexpected Token"); // TODO Break
+            return null;
         }
     }
 

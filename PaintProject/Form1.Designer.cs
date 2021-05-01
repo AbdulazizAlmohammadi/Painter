@@ -36,6 +36,7 @@ namespace PaintProject
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button8 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -43,7 +44,6 @@ namespace PaintProject
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button8 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -136,6 +136,16 @@ namespace PaintProject
             this.panel1.Size = new System.Drawing.Size(163, 516);
             this.panel1.TabIndex = 6;
             // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(43, 447);
+            this.button8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(94, 29);
+            this.button8.TabIndex = 10;
+            this.button8.Text = "حفظ";
+            this.button8.UseVisualStyleBackColor = true;
+            // 
             // button6
             // 
             this.button6.Location = new System.Drawing.Point(43, 366);
@@ -206,6 +216,7 @@ namespace PaintProject
             this.button1.TabIndex = 9;
             this.button1.Text = "تطبيق";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // textBox1
             // 
@@ -216,16 +227,6 @@ namespace PaintProject
             this.textBox1.Size = new System.Drawing.Size(893, 407);
             this.textBox1.TabIndex = 0;
             this.textBox1.Text = "Your source code here..";
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(43, 447);
-            this.button8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(94, 29);
-            this.button8.TabIndex = 10;
-            this.button8.Text = "حفظ";
-            this.button8.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
