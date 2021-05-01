@@ -17,20 +17,22 @@ namespace PaintProject
     public partial class Form1 : Form
     {
         public Canvse canvse = new Canvse();
-        
-        public Color c=Color.Black;
+
+        public Color c = Color.Black;
         public Shape paintSh = new Line();
         public int penSize = 0;
         public string dashStyle = "Solid";
-        
+
         public static List<Shape> paints = new List<Shape> { };
         public static List<Source> source = new List<Source> { };
         string type;
-        public bool IsEditing = false; 
+        public bool IsEditing = false;
         public bool IsDraowing = true;
         public bool IsMovieng = false;
         public bool isResizeing = false;
         public string resize = "";
+
+        public Shape drawingShape = null;
 
         public Shape selectedShape = null;
         public int selectedWidth;
@@ -40,11 +42,11 @@ namespace PaintProject
         public int deltaY = 0;
         public Form1()
         {
-            
+
             InitializeComponent();
         }
-        
-        
+
+
 
 
 
@@ -58,7 +60,7 @@ namespace PaintProject
             IsEditing = false;
             IsMovieng = false;
             selectedShape = null;
-            IsDraowing = true; 
+            IsDraowing = true;
             button3.BackColor = Color.WhiteSmoke;
             button2.BackColor = Color.WhiteSmoke;
             LineButton.BackColor = Color.LightGray;
@@ -69,7 +71,7 @@ namespace PaintProject
             IsEditing = false;
             IsMovieng = false;
             selectedShape = null;
-            IsDraowing = true; 
+            IsDraowing = true;
             button3.BackColor = Color.WhiteSmoke;
             button2.BackColor = Color.LightGray;
             LineButton.BackColor = Color.WhiteSmoke;
@@ -83,7 +85,7 @@ namespace PaintProject
             IsEditing = false;
             IsMovieng = false;
             selectedShape = null;
-            IsDraowing = true; 
+            IsDraowing = true;
             button3.BackColor = Color.LightGray;
             button2.BackColor = Color.WhiteSmoke;
             LineButton.BackColor = Color.WhiteSmoke;
@@ -96,7 +98,7 @@ namespace PaintProject
             MyDialog.AllowFullOpen = true;
             if (MyDialog.ShowDialog() == DialogResult.OK)
             {
-                
+
                 this.c = MyDialog.Color;
                 this.button4.BackColor = c;
                 paintSh.Color = c;
@@ -106,7 +108,7 @@ namespace PaintProject
                     this.tabPage1.Invalidate();
                     ToSource(paints);
                 }
-                
+
             }
         }
 
@@ -115,7 +117,7 @@ namespace PaintProject
             this.penSize = (int)this.numericUpDown1.Value;
             if (selectedShape != null)
             {
-                selectedShape.Pen.Width = (int) this.numericUpDown1.Value;
+                selectedShape.Pen.Width = (int)this.numericUpDown1.Value;
                 ToSource(paints);
                 this.tabPage1.Invalidate();
             }
@@ -126,23 +128,26 @@ namespace PaintProject
             this.dashStyle = this.comboBox1.SelectedItem.ToString();
             if (selectedShape != null)
             {
-                if(dashStyle == "Solid")
+                if (dashStyle == "Solid")
                 {
                     selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
 
-                }else if (dashStyle == "Dot")
+                }
+                else if (dashStyle == "Dot")
                 {
                     selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
-                } else if (dashStyle == "Dash")
+                }
+                else if (dashStyle == "Dash")
                 {
                     selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                 }
-                else if(dashStyle == "Dash dot")
+                else if (dashStyle == "Dash dot")
                 {
                     selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDot;
 
-                } else if (dashStyle == "Dash dot dot")
+                }
+                else if (dashStyle == "Dash dot dot")
                 {
                     selectedShape.Pen.DashStyle = System.Drawing.Drawing2D.DashStyle.DashDotDot;
                 }
@@ -150,7 +155,7 @@ namespace PaintProject
                 this.tabPage1.Invalidate();
             }
         }
-        
+
         private void button5_Click(object sender, EventArgs e)
         {
             paints = new List<Shape> { }; // edit
@@ -163,7 +168,7 @@ namespace PaintProject
         private void button6_Click(object sender, EventArgs e)
         {
             IsEditing = true;
-            IsDraowing = false; 
+            IsDraowing = false;
         }
 
         private void tabPage1_Paint(object sender, PaintEventArgs e)
@@ -185,6 +190,36 @@ namespace PaintProject
                 else if (paint is Line)
                 {
                     g.DrawLine(paint.Pen, paint.startX, paint.startY, paint.endX, paint.endY);
+                }
+            }
+
+            if (drawingShape != null)
+            {
+                Pen p = new Pen(Color.Black, 2);
+                int startX = drawingShape.startX;
+                int startY = drawingShape.startY;
+                p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                if (drawingShape.startX > drawingShape.endX)
+                {
+                    startX = drawingShape.endX;
+                }
+
+                if (drawingShape.startY > drawingShape.endY)
+                {
+                    startY = drawingShape.endY;
+                }
+
+                if (drawingShape is Rectangle)
+                {
+                    g.DrawRectangle(p, startX, startY, drawingShape.getWidth(), drawingShape.getHight());
+                }
+                else if (drawingShape is Circle)
+                {
+                    g.DrawEllipse(p, startX, startY, drawingShape.getWidth(), drawingShape.getHight());
+                }
+                else if (drawingShape is Line)
+                {
+                    g.DrawLine(p, drawingShape.startX, drawingShape.startY, drawingShape.endX, drawingShape.endY);
                 }
             }
 
@@ -217,7 +252,7 @@ namespace PaintProject
                         IsMovieng = true;
                     }
                 }
-              
+
                 this.tabPage1.Invalidate();
             }
         }
@@ -230,6 +265,20 @@ namespace PaintProject
                 //paintSh.start = new Point(e.X, e.Y);
                 paintSh.startX = e.X;
                 paintSh.startY = e.Y;
+                if (paintSh is Rectangle)
+                {
+                    drawingShape = new Rectangle();
+                }
+                else if (paintSh is Circle)
+                {
+                    drawingShape = new Circle();
+                }
+                else if (paintSh is Line)
+                {
+                    drawingShape = new Line();
+                }
+                drawingShape.startX = e.X;
+                drawingShape.startY = e.Y;
             }
 
             if (selectedShape != null)
@@ -319,7 +368,7 @@ namespace PaintProject
                     System.Drawing.Rectangle rect = new System.Drawing.Rectangle(paintSh.getX(), paintSh.getY(),
                         paintSh.getWidth(), paintSh.getHight());
                     paintSh.Path.AddRectangle(rect);
-                   
+
                 }
                 else if (paintSh is Circle)
                 {
@@ -327,7 +376,7 @@ namespace PaintProject
                     System.Drawing.Rectangle cir = new System.Drawing.Rectangle(paintSh.getX(), paintSh.getY(),
                         paintSh.getWidth(), paintSh.getHight());
                     paintSh.Path.AddRectangle(cir);
-                    
+
                 }
                 else if (paintSh is Line)
                 {
@@ -375,11 +424,20 @@ namespace PaintProject
 
             IsMovieng = false;
             isResizeing = false;
+            drawingShape = null;
             ToSource(paints);
 
         }
         private void tabPage1_MouseMove(object sender, MouseEventArgs e)
         {
+            if (IsDraowing && drawingShape != null)
+            {
+                drawingShape.endX = e.X;
+                drawingShape.endY = e.Y;
+
+                this.tabPage1.Invalidate();
+            }
+
             if (IsMovieng && selectedShape != null)
             {
                 int AfterMoveX = selectedShape.getX();
@@ -429,7 +487,7 @@ namespace PaintProject
                 }
 
 
-               
+
                 this.tabPage1.Invalidate();
             }
 
@@ -556,11 +614,11 @@ namespace PaintProject
 
         public void ToSource(List<Shape> shapes)
         {
-            source= new List<Source> { };
+            source = new List<Source> { };
             Source s;
             foreach (var shape in shapes)
             {
-                
+
                 s = new Source();
                 if (shape is Line)
                 {
@@ -588,14 +646,14 @@ namespace PaintProject
                 source.Add(s);
 
             }
-            
 
-            
+
+
             String sourcCode = "";
 
             foreach (var sc in source)
             {
-                sourcCode += $"{sc.name} , {sc.x1} , {sc.y1} , {sc.x2} , {sc.y2}  , {sc.R} ,{sc.G} , {sc.B} , {sc.penSize} , {sc.dashStyle} "+Environment.NewLine;
+                sourcCode += $"{sc.name} , {sc.x1} , {sc.y1} , {sc.x2} , {sc.y2}  , {sc.R} ,{sc.G} , {sc.B} , {sc.penSize} , {sc.dashStyle} " + Environment.NewLine;
             }
             this.textBox1.Text = sourcCode;
         }
